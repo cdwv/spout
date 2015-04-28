@@ -2,6 +2,8 @@
 
 namespace Box\Spout\Writer\Internal\XLSX;
 
+use Box\Spout\Writer\Internal\XLSX\Formula;
+
 use Box\Spout\Common\Exception\IOException;
 use Box\Spout\Writer\Exception\InvalidDataException;
 use Box\Spout\Writer\Helper\XLSX\CellHelper;
@@ -141,6 +143,9 @@ EOD;
                 case gettype($cellValue) === 'double':
                     $data .= '><v>' . $cellValue . '</v></c>' . PHP_EOL;
                     break;
+                case gettype($cellValue) === 'object' && $cellValue instanceof Formula:
+                    $data .= '><f aca="false">SUM(A1:A2)</f></c>' . PHP_EOL;
+                break;
                 case gettype($cellValue) === 'object' && method_exists($cellValue, '__toString'):
                     $cellValue = (string)$cellValue;
                 case gettype($cellValue) === 'string':
